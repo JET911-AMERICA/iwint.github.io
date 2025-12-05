@@ -216,29 +216,21 @@
 
     <div class="section-header">
         <span class="section-title">Transaktionen</span>
-        <a href="/transactions" class="show-all">Alle anzeigen</a>
+        <!-- STATIC LINK -->
+        <a href="transactions.html" class="show-all">Alle anzeigen</a>
     </div>
 
-    {% if latest_transaction %}
+    <!-- STATIC EXAMPLE TRANSACTION (No Python Logic) -->
     <div class="card">
         <div class="avatar-circle">
-            {% if latest_transaction.image %}
-                <img src="{{ url_for('static', filename='uploads/' + latest_transaction.image) }}">
-            {% else %}
-                <i class="fas fa-user"></i>
-            {% endif %}
+            <i class="fas fa-user"></i>
         </div>
         <div class="tx-details">
-            <span class="tx-name">{{ latest_transaction.name }}</span>
-            <span class="tx-date">{{ latest_transaction.date }}</span>
+            <span class="tx-name">Max Mustermann</span>
+            <span class="tx-date">Heute</span>
         </div>
-        <div class="tx-amount">{{ latest_transaction.amount }}</div>
+        <div class="tx-amount">- 25.00</div>
     </div>
-    {% else %}
-    <div class="card" style="justify-content: center; color: #999;">
-        <p>Noch keine Transaktionen</p>
-    </div>
-    {% endif %}
 
     <div class="section-header">
         <span class="section-title">Partner-Funktionen</span>
@@ -265,7 +257,8 @@
     </div>
 
     <div class="big-actions">
-        <a href="/pay" class="big-btn">
+        <!-- STATIC LINK -->
+        <a href="senden.html" class="big-btn">
             <div class="big-btn-icon">CHF &uarr;</div>
             <span class="big-btn-text">Senden</span>
         </a>
@@ -276,7 +269,8 @@
     </div>
 
     <div class="pay-footer">
-        <a href="/scan" class="pay-btn">
+        <!-- STATIC LINK -->
+        <a href="scan.html" class="pay-btn">
             <i class="fas fa-qrcode"></i> Bezahlen
         </a>
     </div>
