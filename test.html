@@ -3,134 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geld senden</title>
+    <title>Zahlung erfolgreich</title>
     <style>
-        /* Grundlegendes Design */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: white;
+            background-color: #6a9e55;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: white;
+            margin: 0;
             display: flex;
-            justify-content: center;
-            padding: 20px;
-            color: #000;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: space-between;
         }
 
-        .container {
+        .header-content {
+            text-align: center;
+            margin-top: 80px;
+            flex-grow: 1;
+        }
+
+        .icon-container {
+            width: 80px;
+            height: 90px;
+            margin: 0 auto 20px auto;
+            position: relative;
+        }
+
+        svg {
             width: 100%;
-            max-width: 400px;
+            height: 100%;
         }
 
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-align: left;
+        /* Animationen */
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes loop-draw {
+            0%, 100% { stroke-dashoffset: 80; }
+            50% { stroke-dashoffset: 0; }
+        }
+        @keyframes loop-fade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        #hexagon {
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+            animation: fadeIn 0.4s ease-in forwards, loop-fade 2.5s ease-in-out infinite;
+        }
+
+        #checkmark {
+            stroke: white;
+            stroke-width: 4;
+            fill: none;
+            stroke-dasharray: 80;
+            stroke-dashoffset: 80;
+            animation: draw 0.5s ease-out forwards, loop-draw 2.5s ease-in-out infinite;
+            animation-delay: 0.4s;
+        }
+
+        .fade-in-element {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+            animation-delay: 0.9s;
         }
 
         h2 {
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 10px;
+            font-weight: 400;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
         }
 
-        label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        /* Styling der Eingabefelder */
-        input[type="number"],
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #000;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            outline: none;
-            background: white;
-            box-sizing: border-box; /* Verhindert Probleme mit Padding/Border */
-
-            /* Wichtige Korrekturen, um sicherzustellen, dass das Feld im Vordergrund und klickbar ist */
-            position: relative;
-            z-index: 2;
-            pointer-events: auto !important; /* Erzwingt Klickbarkeit */
-        }
-
-        /* Container für den Datei-Upload */
-        .file-upload-wrapper {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 30px;
-            background-color: #fff;
-        }
-
-        input[type="file"] {
-            width: 100%;
-            font-size: 14px;
-            border: none;
-            margin-bottom: 0;
-        }
-
-        /* Senden Button */
-        .send-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #B05C55;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        .send-btn:active {
+        .date-time {
+            font-size: 1rem;
             opacity: 0.9;
         }
 
-        /* Abbrechen Link */
-        .cancel-link {
-            display: block;
+        .card {
+            background-color: white;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 15px;
+            color: black;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
             text-align: center;
-            color: #666;
-            text-decoration: none;
-            font-size: 16px;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        .amount-value {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .separator {
+            border-top: 1px solid #e0e0e0;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .separator::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: -6px;
+            transform: translateX(-50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .recipient-value {
+            font-size: 1.5rem;
             margin-top: 10px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .ok-btn {
+            background-color: white;
+            color: black;
+            width: 90%;
+            max-width: 350px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: none;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Geld senden an:</h1>
-        <h2>Unbekannter Empfänger</h2>
+    <div class="header-content">
+        <div class="icon-container">
+            <svg viewBox="0 0 100 115">
+                <path id="hexagon" d="M50 5 L95 30 L95 85 L50 110 L5 85 L5 30 Z" />
+                <path id="checkmark" d="M30 60 L45 75 L70 40" />
+            </svg>
+        </div>
 
-        <form action="#" method="POST">
-            
-            <label for="amount">Betrag (CHF):</label>
-            <input type="number" id="amount" name="amount" placeholder="0.00" step="0.01">
-
-            <label for="name">Name (Optional):</label>
-            <input type="text" id="name" name="name" placeholder="Name eingeben">
-
-            <label for="file">Bild (Optional):</label>
-            <div class="file-upload-wrapper">
-                <input type="file" id="file" name="image">
-            </div>
-
-            <button type="submit" class="send-btn">Senden</button>
-
-            <a href="javascript:history.back()" class="cancel-link">Abbrechen</a>
-            
-        </form>
+        <div class="fade-in-element">
+            <h2>Zahlung erfolgreich</h2>
+            <div class="date-time" id="currentDate"></div>
+        </div>
     </div>
 
+    <!-- Weiße Karte mit Details -->
+    <div class="card fade-in-element">
+        <span class="label">Betrag</span>
+        <!-- Die ID 'displayAmount' wird automatisch ausgefüllt -->
+        <span class="amount-value" id="displayAmount">CHF 0.00</span>
+        
+        <div class="separator"></div>
+        
+        <span class="label">Empfänger</span>
+        <!-- Die ID 'displayRecipient' wird automatisch ausgefüllt -->
+        <div class="recipient-value" id="displayRecipient">Unbekannt</div>
+    </div>
+
+    <!-- OK Button führt zurück zur Startseite -->
+    <a href="index.html" class="ok-btn fade-in-element">OK</a>
+
+    <script>
+        // 1. Datum und Uhrzeit anzeigen
+        const now = new Date();
+        const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit' };
+        
+        // Schweizer Formatierung
+        document.getElementById('currentDate').innerText = 
+            now.toLocaleDateString('de-CH', dateOptions) + ' | ' + now.toLocaleTimeString('de-CH', timeOptions);
+
+        // 2. Daten aus der URL holen (funktioniert mit Github Pages)
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Betrag suchen
+        let amount = urlParams.get('amount');
+        if (!amount) amount = "0.00"; // Falls kein Betrag da ist
+        document.getElementById('displayAmount').innerText = 'CHF ' + amount;
+
+        // Name suchen
+        let recipientName = urlParams.get('name') || urlParams.get('recipient_name');
+        if (!recipientName) recipientName = "Unbekannt";
+        document.getElementById('displayRecipient').innerText = recipientName;
+    </script>
 </body>
 </html>
