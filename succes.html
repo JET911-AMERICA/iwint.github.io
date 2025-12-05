@@ -5,156 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlung erfolgreich</title>
     <style>
-        body {
-            background-color: #6a9e55;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            justify-content: space-between;
-        }
-
-        .header-content {
-            text-align: center;
-            margin-top: 80px;
-            flex-grow: 1;
-        }
-
-        .icon-container {
-            width: 80px;
-            height: 90px;
-            margin: 0 auto 20px auto;
-            position: relative;
-        }
-
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-
+        body { background-color: #6a9e55; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; justify-content: space-between; }
+        .header-content { text-align: center; margin-top: 80px; flex-grow: 1; }
+        .icon-container { width: 80px; height: 90px; margin: 0 auto 20px auto; position: relative; }
+        svg { width: 100%; height: 100%; }
         @keyframes draw { to { stroke-dashoffset: 0; } }
         @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes loop-draw {
-            0%, 100% { stroke-dashoffset: 80; }
-            50% { stroke-dashoffset: 0; }
-        }
-        @keyframes loop-fade {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        #hexagon {
-            stroke: white;
-            stroke-width: 2;
-            fill: none;
-            animation: fadeIn 0.4s ease-in forwards, loop-fade 2.5s ease-in-out infinite;
-            animation-delay: 0s, 2s;
-        }
-
-        #checkmark {
-            stroke: white;
-            stroke-width: 4;
-            fill: none;
-            stroke-dasharray: 80;
-            stroke-dashoffset: 80;
-            animation: draw 0.5s ease-out forwards, loop-draw 2.5s ease-in-out infinite;
-            animation-delay: 0.4s, 2s;
-        }
-
-        .fade-in-element {
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in forwards;
-            animation-delay: 0.9s;
-        }
-
-        h2 {
-            font-weight: 400;
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-        }
-
-        .date-time {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .card {
-            background-color: white;
-            width: 90%;
-            max-width: 350px;
-            border-radius: 15px;
-            color: black;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .label {
-            font-size: 0.9rem;
-            color: #333;
-            margin-bottom: 5px;
-            display: block;
-            text-align: left;
-        }
-
-        .amount-value {
-            font-size: 1.8rem;
-            font-weight: 500;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .separator {
-            border-top: 1px solid #e0e0e0;
-            margin: 15px 0;
-            position: relative;
-        }
-
-        .separator::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: -6px;
-            transform: translateX(-50%) rotate(45deg);
-            width: 10px;
-            height: 10px;
-            background-color: white;
-            border-bottom: 1px solid #e0e0e0;
-            border-right: 1px solid #e0e0e0;
-        }
-
-        .recipient-value {
-            font-size: 1.5rem;
-            margin-top: 10px;
-            display: block;
-            font-weight: 500;
-            word-wrap: break-word; /* Falls der Name sehr lang ist */
-        }
-
-        .ok-btn {
-            background-color: white;
-            color: black;
-            width: 90%;
-            max-width: 350px;
-            padding: 15px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            border: none;
-            display: block;
-        }
-
+        #hexagon { stroke: white; stroke-width: 2; fill: none; animation: fadeIn 0.4s ease-in forwards; }
+        #checkmark { stroke: white; stroke-width: 4; fill: none; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw 0.5s ease-out forwards; animation-delay: 0.4s; }
+        .fade-in-element { opacity: 0; animation: fadeIn 0.5s ease-in forwards; animation-delay: 0.9s; }
+        h2 { font-weight: 400; font-size: 1.4rem; margin-bottom: 10px; }
+        .date-time { font-size: 1rem; opacity: 0.9; }
+        .card { background-color: white; width: 90%; max-width: 350px; border-radius: 15px; color: black; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; }
+        .label { font-size: 0.9rem; color: #333; margin-bottom: 5px; display: block; text-align: left; }
+        .amount-value { font-size: 1.8rem; font-weight: 500; margin-bottom: 20px; display: block; }
+        .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; }
+        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; }
+        .ok-btn { background-color: white; color: black; width: 90%; max-width: 350px; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border-radius: 10px; margin-bottom: 30px; border: none; display: block; }
     </style>
 </head>
 <body>
-
     <div class="header-content">
         <div class="icon-container">
             <svg viewBox="0 0 100 115">
@@ -162,7 +32,6 @@
                 <path id="checkmark" d="M30 60 L45 75 L70 40" />
             </svg>
         </div>
-
         <div class="fade-in-element">
             <h2>Zahlung erfolgreich</h2>
             <div class="date-time" id="currentDate"></div>
@@ -171,46 +40,55 @@
 
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
-        <!-- Die ID 'displayAmount' wird vom JavaScript befüllt -->
         <span class="amount-value" id="displayAmount">CHF 0.00</span>
-        
         <div class="separator"></div>
-        
         <span class="label">Empfänger</span>
-        <div class="recipient-value" id="displayRecipient">
-            <!-- Wird per Javascript befüllt -->
-        </div>
+        <div class="recipient-value" id="displayRecipient">Unbekannt</div>
     </div>
 
-    <!-- Link zurück zur index.html -->
     <a href="index.html" class="ok-btn fade-in-element">OK</a>
 
     <script>
-        // 1. Datum und Uhrzeit setzen
+        // 1. Datum/Zeit
         const now = new Date();
-        const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-        const timeOptions = { hour: '2-digit', minute: '2-digit' };
-        const dateStr = now.toLocaleDateString('de-CH', dateOptions); 
-        const timeStr = now.toLocaleTimeString('de-CH', timeOptions);
+        const dateStr = now.toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' }); 
+        const timeStr = now.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('currentDate').innerText = `${dateStr} | ${timeStr}`;
 
-        // 2. Daten aus der URL holen (die von pay.html oder senden.html kommen)
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        // 2. Daten aus URL holen
+        const urlParams = new URLSearchParams(window.location.search);
+        let amount = urlParams.get('amount') || "0.00";
+        let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "Unbekannt";
 
-        // Betrag holen
-        let amount = urlParams.get('amount');
-        if (!amount) amount = "0.00"; // Fallback, falls leer
+        // Anzeigen
         document.getElementById('displayAmount').innerText = 'CHF ' + amount;
-
-        // Name holen (unterstützt beide Feldnamen aus deinen Dateien: 'name' und 'recipient_name')
-        let recipientName = urlParams.get('name') || urlParams.get('recipient_name');
-        
-        if (!recipientName) {
-            recipientName = "Unbekannt";
-        }
         document.getElementById('displayRecipient').innerText = recipientName;
 
+        // 3. SPEICHERN (LocalStorage Trick)
+        // Wir prüfen, ob wir diese Transaktion gerade erst gespeichert haben, um Dopplungen beim Neuladen zu vermeiden (einfacher Schutz)
+        const lastSaved = sessionStorage.getItem('last_tx_id');
+        const currentTxId = amount + recipientName + timeStr; // Simpler ID-Check
+
+        if (lastSaved !== currentTxId) {
+            // Alte Liste laden
+            let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
+            
+            // Neue Transaktion vorne anfügen
+            transactions.unshift({
+                name: recipientName,
+                amount: amount,
+                date: "Heute", // Vereinfacht für die Anzeige
+                time: timeStr,
+                fullDate: now.toISOString() // Für Sortierung
+            });
+
+            // Liste begrenzen (z.B. nur die letzten 20 speichern)
+            if (transactions.length > 20) transactions.pop();
+
+            // Wieder speichern
+            localStorage.setItem('twint_transactions', JSON.stringify(transactions));
+            sessionStorage.setItem('last_tx_id', currentTxId);
+        }
     </script>
 </body>
 </html>
