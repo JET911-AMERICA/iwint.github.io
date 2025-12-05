@@ -132,19 +132,7 @@
             margin-top: 10px;
             display: block;
             font-weight: 500;
-        }
-
-        /* === HIER IST DIE ÄNDERUNG === */
-        .recipient-img {
-            /* Begrenze die Breite des Bildes wieder auf 100px */
-            max-width: 100px;
-            /* Die Höhe passt sich automatisch an */
-            height: auto;
-            /* Leicht abgerundete Ecken */
-            border-radius: 10px;
-            /* Zeigt das ganze Bild, ohne es abzuschneiden */
-            object-fit: contain;
-            margin-top: 10px;
+            word-wrap: break-word; /* Falls der Name sehr lang ist */
         }
 
         .ok-btn {
@@ -183,27 +171,46 @@
 
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
-        <span class="amount-value">CHF {{ amount }}</span>
+        <!-- Die ID 'displayAmount' wird vom JavaScript befüllt -->
+        <span class="amount-value" id="displayAmount">CHF 0.00</span>
+        
         <div class="separator"></div>
+        
         <span class="label">Empfänger</span>
-        <div class="recipient-value">
-            {% if image %}
-                <img src="{{ url_for('static', filename='uploads/' + image) }}" class="recipient-img">
-            {% else %}
-                {{ name }}
-            {% endif %}
+        <div class="recipient-value" id="displayRecipient">
+            <!-- Wird per Javascript befüllt -->
         </div>
     </div>
 
-    <a href="/" class="ok-btn fade-in-element">OK</a>
+    <!-- Link zurück zur index.html -->
+    <a href="index.html" class="ok-btn fade-in-element">OK</a>
 
     <script>
+        // 1. Datum und Uhrzeit setzen
         const now = new Date();
         const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
         const timeOptions = { hour: '2-digit', minute: '2-digit' };
         const dateStr = now.toLocaleDateString('de-CH', dateOptions); 
         const timeStr = now.toLocaleTimeString('de-CH', timeOptions);
         document.getElementById('currentDate').innerText = `${dateStr} | ${timeStr}`;
+
+        // 2. Daten aus der URL holen (die von pay.html oder senden.html kommen)
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Betrag holen
+        let amount = urlParams.get('amount');
+        if (!amount) amount = "0.00"; // Fallback, falls leer
+        document.getElementById('displayAmount').innerText = 'CHF ' + amount;
+
+        // Name holen (unterstützt beide Feldnamen aus deinen Dateien: 'name' und 'recipient_name')
+        let recipientName = urlParams.get('name') || urlParams.get('recipient_name');
+        
+        if (!recipientName) {
+            recipientName = "Unbekannt";
+        }
+        document.getElementById('displayRecipient').innerText = recipientName;
+
     </script>
 </body>
 </html>
