@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QR Scanner</title>
+    <style>
+        /* CSS bleibt unverändert */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #000; overflow: hidden; height: 100vh; width: 100vw; color: white; display: flex; flex-direction: column; }
+        .ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; background: transparent; }
+        header { padding: 50px 20px 20px 20px; display: flex; justify-content: center; align-items: center; position: relative; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0)); }
+        header h1 { font-size: 18px; font-weight: 600; }
+        header .cancel-btn { position: absolute; right: 20px; font-size: 16px; color: white; text-decoration: none; cursor: pointer; }
+        #qr-reader { width: 100%; flex-grow: 1; border: none !important; position: relative; z-index: 1; }
+        #qr-reader-region { border: 4px solid white !important; border-radius: 20px; }
+        .bottom-info { padding: 20px; padding-bottom: 50px; text-align: center; background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0)); }
+        .bottom-info p { font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="qr-reader"></div>
+
+    <div class="ui-layer">
+        <header>
+            <h1>QR-Code</h1>
+            <a href="/" class="cancel-btn">Abbrechen</a>
+        </header>
+        <div style="flex-grow: 1;"></div>
+        <div class="bottom-info">
+            <p>Scanne einen beliebigen QR-Code</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(`Roher Scan-Inhalt: ${decodedText}`);
+            
+            // KORREKTUR HIER: Der Variablenname ist jetzt korrekt geschrieben (grosses Q)
+            html5QrcodeScanner.clear().catch(error => {
+                console.error("Fehler beim Stoppen des Scanners.", error);
+            });
+
+            let recipientName = decodedText;
+            const lines = decodedText.split('\n');
+            const twintTechCodeRegex = /^\d{2}:[a-f0-9\-:#]+$/i;
+
+            if (lines[0].trim() === 'SPC' && lines.length >= 6) {
+                recipientName = lines[5].trim();
+                console.log(`SPC erkannt! Empfänger: ${recipientName}`);
+            } else if (twintTechCodeRegex.test(decodedText.trim())) {
+                recipientName = "TWINT Händler-Zahlung";
+                console.log(`Technischer TWINT-Code erkannt!`);
+            } else {
+                console.log("Einfacher Text-QR-Code erkannt.");
+            }
+
+            window.location.href = `/pay?recipient=${encodeURIComponent(recipientName)}`;
+        }
+
+        function onScanFailure(error) { /* Fehler ignorieren */ }
+
+        // Die Variable wird hier mit grossem Q definiert
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
+        
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+
+</body>
+</html>```
+

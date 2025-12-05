@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alle Transaktionen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Wir kopieren die Styles von index.html, die wir benötigen */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: white;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: #555;
+            overflow: hidden;
+        }
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .tx-details { flex-grow: 1; }
+        .tx-name { font-weight: 600; font-size: 1rem; display: block; }
+        .tx-date { color: #999; font-size: 0.8rem; }
+        .tx-amount { font-weight: 600; font-size: 1rem; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007aff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/" class="back-link">&larr; Zurück zur Startseite</a>
+    <h1>Alle Transaktionen</h1>
+
+    {% for tx in transactions %}
+        <div class="card">
+            <div class="avatar-circle">
+                {% if tx.image %}
+                    <img src="{{ url_for('static', filename='uploads/' + tx.image) }}">
+                {% else %}
+                    <i class="fas fa-user"></i>
+                {% endif %}
+            </div>
+            <div class="tx-details">
+                <span class="tx-name">{{ tx.name }}</span>
+                <span class="tx-date">{{ tx.date }}</span>
+            </div>
+            <div class="tx-amount">{{ tx.amount }}</div>
+        </div>
+    {% else %}
+        <div class="card" style="justify-content: center; color: #999;">
+            <p>Bisher keine Transaktionen vorhanden.</p>
+        </div>
+    {% endfor %}
+
+</body>
+</html>

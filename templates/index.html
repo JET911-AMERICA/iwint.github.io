@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 100px;
+        }
+        .hero-section {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 15px;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .fake-phone {
+            background-color: black;
+            color: white;
+            width: 60px;
+            height: 100px;
+            margin: 0 auto;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .promo-text {
+            background-color: black;
+            color: white;
+            display: inline-block;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: -15px;
+            position: relative;
+            z-index: 2;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .show-all {
+            color: #eb5d5e;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+        .card {
+            background-color: white;
+            margin: 0 15px 20px 15px;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: #555;
+            overflow: hidden;
+        }
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .tx-details {
+            flex-grow: 1;
+        }
+        .tx-name {
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+        }
+        .tx-date {
+            color: #999;
+            font-size: 0.8rem;
+        }
+        .tx-amount {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        .grid-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 80px;
+            justify-content: center;
+        }
+        .grid-icon {
+            font-size: 1.5rem;
+            color: #555;
+            margin-bottom: 8px;
+            border: 2px solid #555;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .grid-label {
+            font-size: 0.7rem;
+            color: #333;
+            line-height: 1.1;
+        }
+        .big-actions {
+            display: flex;
+            gap: 15px;
+            padding: 0 15px;
+        }
+        .big-btn {
+            background-color: white;
+            flex: 1;
+            border-radius: 20px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: black;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .big-btn-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
+        .big-btn-text {
+            font-size: 1rem;
+        }
+        .pay-footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            z-index: 100;
+        }
+        .pay-btn {
+            background-color: #c94f4f;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(201, 79, 79, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pay-btn i {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="hero-banner">
+            <div class="fake-phone">TWINT</div>
+        </div>
+        <div class="promo-text">Nutze I WINT den ganzen Tag</div>
+    </div>
+
+    <div class="section-header">
+        <span class="section-title">Transaktionen</span>
+        <a href="/transactions" class="show-all">Alle anzeigen</a>
+    </div>
+
+    {% if latest_transaction %}
+    <div class="card">
+        <div class="avatar-circle">
+            {% if latest_transaction.image %}
+                <img src="{{ url_for('static', filename='uploads/' + latest_transaction.image) }}">
+            {% else %}
+                <i class="fas fa-user"></i>
+            {% endif %}
+        </div>
+        <div class="tx-details">
+            <span class="tx-name">{{ latest_transaction.name }}</span>
+            <span class="tx-date">{{ latest_transaction.date }}</span>
+        </div>
+        <div class="tx-amount">{{ latest_transaction.amount }}</div>
+    </div>
+    {% else %}
+    <div class="card" style="justify-content: center; color: #999;">
+        <p>Noch keine Transaktionen</p>
+    </div>
+    {% endif %}
+
+    <div class="section-header">
+        <span class="section-title">Partner-Funktionen</span>
+        <a href="#" class="show-all">Alle anzeigen</a>
+    </div>
+
+    <div class="grid-container">
+        <div class="grid-item">
+            <div class="grid-icon"><i class="fas fa-shopping-cart"></i></div>
+            <span class="grid-label">Super<br>Deals</span>
+        </div>
+        <div class="grid-item">
+            <div class="grid-icon"><i class="fas fa-money-bill-wave"></i></div>
+            <span class="grid-label">Bargeld<br>beziehen</span>
+        </div>
+        <div class="grid-item">
+            <div class="grid-icon"><i class="fas fa-ticket-alt"></i></div>
+            <span class="grid-label">Digitale<br>Gutscheine</span>
+        </div>
+        <div class="grid-item">
+            <div class="grid-icon"><i class="fas fa-parking"></i></div>
+            <span class="grid-label">Parkieren</span>
+        </div>
+    </div>
+
+    <div class="big-actions">
+        <a href="/pay" class="big-btn">
+            <div class="big-btn-icon">CHF &uarr;</div>
+            <span class="big-btn-text">Senden</span>
+        </a>
+        <a href="#" class="big-btn">
+            <div class="big-btn-icon">CHF &darr;</div>
+            <span class="big-btn-text">Anfordern & aufteilen</span>
+        </a>
+    </div>
+
+    <div class="pay-footer">
+        <a href="/scan" class="pay-btn">
+            <i class="fas fa-qrcode"></i> Bezahlen
+        </a>
+    </div>
+
+</body>
+</html>
