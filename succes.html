@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlung erfolgreich</title>
+    
+    <!-- === APP CODE START === -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- === APP CODE ENDE === -->
+
     <style>
         body { background-color: #6a9e55; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; justify-content: space-between; }
         .header-content { text-align: center; margin-top: 80px; flex-grow: 1; }
@@ -37,7 +44,6 @@
             <div class="date-time" id="currentDate"></div>
         </div>
     </div>
-
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
         <span class="amount-value" id="displayAmount">CHF 0.00</span>
@@ -45,47 +51,23 @@
         <span class="label">Empfänger</span>
         <div class="recipient-value" id="displayRecipient">Unbekannt</div>
     </div>
-
     <a href="index.html" class="ok-btn fade-in-element">OK</a>
-
     <script>
-        // 1. Datum/Zeit
         const now = new Date();
         const dateStr = now.toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' }); 
         const timeStr = now.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('currentDate').innerText = `${dateStr} | ${timeStr}`;
-
-        // 2. Daten aus URL holen
         const urlParams = new URLSearchParams(window.location.search);
         let amount = urlParams.get('amount') || "0.00";
         let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "Unbekannt";
-
-        // Anzeigen
         document.getElementById('displayAmount').innerText = 'CHF ' + amount;
         document.getElementById('displayRecipient').innerText = recipientName;
-
-        // 3. SPEICHERN (LocalStorage Trick)
-        // Wir prüfen, ob wir diese Transaktion gerade erst gespeichert haben, um Dopplungen beim Neuladen zu vermeiden (einfacher Schutz)
         const lastSaved = sessionStorage.getItem('last_tx_id');
-        const currentTxId = amount + recipientName + timeStr; // Simpler ID-Check
-
+        const currentTxId = amount + recipientName + timeStr; 
         if (lastSaved !== currentTxId) {
-            // Alte Liste laden
             let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
-            
-            // Neue Transaktion vorne anfügen
-            transactions.unshift({
-                name: recipientName,
-                amount: amount,
-                date: "Heute", // Vereinfacht für die Anzeige
-                time: timeStr,
-                fullDate: now.toISOString() // Für Sortierung
-            });
-
-            // Liste begrenzen (z.B. nur die letzten 20 speichern)
+            transactions.unshift({ name: recipientName, amount: amount, date: "Heute", time: timeStr });
             if (transactions.length > 20) transactions.pop();
-
-            // Wieder speichern
             localStorage.setItem('twint_transactions', JSON.stringify(transactions));
             sessionStorage.setItem('last_tx_id', currentTxId);
         }
