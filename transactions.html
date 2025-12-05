@@ -4,119 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alle Transaktionen</title>
-    <!-- Font Awesome für Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f2f2f7;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        .card {
-            background-color: white;
-            margin-bottom: 15px;
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .avatar-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
-            color: #555;
-            overflow: hidden;
-            flex-shrink: 0; /* Verhindert, dass der Kreis eingedrückt wird */
-        }
-        .avatar-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        body { font-family: -apple-system, sans-serif; background-color: #f2f2f7; margin: 0; padding: 20px; }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; }
+        .card { background-color: white; margin-bottom: 15px; border-radius: 15px; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; color: #555; flex-shrink: 0; }
         .tx-details { flex-grow: 1; }
         .tx-name { font-weight: 600; font-size: 1rem; display: block; }
         .tx-date { color: #999; font-size: 0.8rem; }
         .tx-amount { font-weight: 600; font-size: 1rem; }
-        
-        /* Negativer Betrag (Ausgabe) rot, Positiver schwarz */
-        .tx-amount.minus { color: black; } 
-        
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #007aff;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #007aff; text-decoration: none; font-size: 1rem; }
     </style>
 </head>
 <body>
 
-    <!-- Link korrigiert auf index.html -->
     <a href="index.html" class="back-link">&larr; Zurück zur Startseite</a>
     <h1>Alle Transaktionen</h1>
 
-    <!-- Da wir keine Datenbank haben, schreiben wir hier feste Beispiele rein -->
+    <!-- Container, wo die Liste reinkommt -->
+    <div id="transaction-list">
+        <!-- Wird per Javascript gefüllt -->
+    </div>
     
-    <!-- Beispiel 1 -->
-    <div class="card">
-        <div class="avatar-circle">
-            <i class="fas fa-shopping-cart"></i>
-        </div>
-        <div class="tx-details">
-            <span class="tx-name">Coop Supermarkt</span>
-            <span class="tx-date">Heute, 08:30</span>
-        </div>
-        <div class="tx-amount">- CHF 12.50</div>
+    <div id="no-tx-message" style="display:none; text-align:center; color:#999; margin-top:50px;">
+        Noch keine Transaktionen vorhanden.
     </div>
 
-    <!-- Beispiel 2 -->
-    <div class="card">
-        <div class="avatar-circle">
-            <i class="fas fa-train"></i>
-        </div>
-        <div class="tx-details">
-            <span class="tx-name">SBB CFF FFS</span>
-            <span class="tx-date">Gestern, 14:15</span>
-        </div>
-        <div class="tx-amount">- CHF 24.80</div>
-    </div>
+    <script>
+        // 1. Daten aus dem Speicher laden
+        let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
+        const listContainer = document.getElementById('transaction-list');
+        const noTxMessage = document.getElementById('no-tx-message');
 
-    <!-- Beispiel 3 -->
-    <div class="card">
-        <div class="avatar-circle">
-            <i class="fas fa-user"></i>
-        </div>
-        <div class="tx-details">
-            <span class="tx-name">Max Mustermann</span>
-            <span class="tx-date">03.12.2025, 19:45</span>
-        </div>
-        <div class="tx-amount">- CHF 50.00</div>
-    </div>
-
-    <!-- Beispiel 4 -->
-    <div class="card">
-        <div class="avatar-circle">
-            <i class="fas fa-pizza-slice"></i>
-        </div>
-        <div class="tx-details">
-            <span class="tx-name">Pizzeria Napoli</span>
-            <span class="tx-date">01.12.2025, 12:00</span>
-        </div>
-        <div class="tx-amount">- CHF 34.00</div>
-    </div>
+        if (transactions.length === 0) {
+            noTxMessage.style.display = 'block';
+        } else {
+            // 2. Für jede gespeicherte Transaktion eine Karte erstellen
+            transactions.forEach(tx => {
+                const html = `
+                <div class="card">
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="tx-details">
+                        <span class="tx-name">${tx.name}</span>
+                        <span class="tx-date">${tx.date}, ${tx.time}</span>
+                    </div>
+                    <div class="tx-amount">- CHF ${tx.amount}</div>
+                </div>
+                `;
+                listContainer.innerHTML += html;
+            });
+        }
+    </script>
 
 </body>
 </html>
