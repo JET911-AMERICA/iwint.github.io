@@ -91,6 +91,7 @@
             font-size: 1.2rem;
             color: #555;
             overflow: hidden;
+            flex-shrink: 0;
         }
         .avatar-circle img {
             width: 100%;
@@ -216,20 +217,15 @@
 
     <div class="section-header">
         <span class="section-title">Transaktionen</span>
-        <!-- STATIC LINK -->
         <a href="transactions.html" class="show-all">Alle anzeigen</a>
     </div>
 
-    <!-- STATIC EXAMPLE TRANSACTION (No Python Logic) -->
-    <div class="card">
-        <div class="avatar-circle">
-            <i class="fas fa-user"></i>
+    <!-- HIER: Container für die letzte Transaktion -->
+    <div id="latest-transaction-container">
+        <!-- Standard-Anzeige, falls noch keine Daten da sind -->
+        <div class="card" style="justify-content: center; color: #999;">
+            <p style="margin:0;">Keine aktuellen Transaktionen</p>
         </div>
-        <div class="tx-details">
-            <span class="tx-name">Max Mustermann</span>
-            <span class="tx-date">Heute</span>
-        </div>
-        <div class="tx-amount">- 25.00</div>
     </div>
 
     <div class="section-header">
@@ -257,7 +253,7 @@
     </div>
 
     <div class="big-actions">
-        <!-- STATIC LINK -->
+        <!-- Link zu senden.html -->
         <a href="senden.html" class="big-btn">
             <div class="big-btn-icon">CHF &uarr;</div>
             <span class="big-btn-text">Senden</span>
@@ -269,11 +265,36 @@
     </div>
 
     <div class="pay-footer">
-        <!-- STATIC LINK -->
         <a href="scan.html" class="pay-btn">
             <i class="fas fa-qrcode"></i> Bezahlen
         </a>
     </div>
+
+    <!-- HIER: Das Script lädt die letzte Transaktion -->
+    <script>
+        // 1. Gespeicherte Daten laden
+        const transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
+        const container = document.getElementById('latest-transaction-container');
+
+        // 2. Wenn Daten vorhanden sind, die neuste (erste) anzeigen
+        if (transactions.length > 0) {
+            const latest = transactions[0]; // Das erste Element ist das neuste
+
+            container.innerHTML = `
+                <div class="card">
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="tx-details">
+                        <span class="tx-name">${latest.name}</span>
+                        <span class="tx-date">${latest.date}</span>
+                    </div>
+                    <div class="tx-amount">- CHF ${latest.amount}</div>
+                </div>
+            `;
+        }
+        // Falls keine Daten da sind, bleibt der Standardtext stehen
+    </script>
 
 </body>
 </html>
