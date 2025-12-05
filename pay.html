@@ -11,47 +11,29 @@
         button { background-color: #c94f4f; color: white; border: none; cursor: pointer; }
         h2 { text-align: center; font-size: 1.5rem; font-weight: bold; margin-bottom: 30px; }
         a { text-decoration: none; color: #666; display:block; text-align:center; }
-        .recipient-name-display {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
     </style>
 </head>
 <body>
     <h2>Geld senden</h2>
 
-    <form action="/pay" method="post" enctype="multipart/form-data">
+    <!-- WICHTIG: action zeigt auf deine Erfolgsseite, method auf GET -->
+    <form action="succes.html" method="GET">
         
-        {% if recipient %}
-            <!-- Fall 1: Empfänger ist durch Scan bekannt -->
-            <label>Empfänger:</label>
-            <div class="recipient-name-display">{{ recipient }}</div>
-            <input type="hidden" name="recipient_name" value="{{ recipient }}">
-            <!-- Das Feld für das Bild wird hier NICHT angezeigt -->
+        <!-- Da GitHub Pages kein Python kann, zeigen wir einfach immer die Eingabefelder an -->
+        <label for="name">Name des Empfängers:</label>
+        <input type="text" id="name" name="recipient_name" placeholder="z.B. Max Mustermann" required>
 
-        {% else %}
-            <!-- Fall 2: Empfänger ist unbekannt (manuelle Eingabe) -->
-            <label for="name">Name des Empfängers:</label>
-            <input type="text" id="name" name="recipient_name" placeholder="z.B. Max Mustermann" required>
-
-            <!-- === HIER IST DIE ÄNDERUNG === -->
-            <!-- Das Feld für das Bild wird NUR hier angezeigt -->
-            <label for="recipient_image">Bild (Optional):</label>
-            <input type="file" id="recipient_image" name="recipient_image" accept="image/*">
-        {% endif %}
+        <label for="recipient_image">Bild (Optional):</label>
+        <input type="file" id="recipient_image" name="recipient_image" accept="image/*">
 
         <label for="amount">Betrag (CHF):</label>
         <input type="number" id="amount" step="0.05" name="amount" placeholder="0.00" required autofocus>
 
         <button type="submit">Senden</button>
     </form>
+    
     <br>
-    <a href="/">Abbrechen</a>
+    <!-- Link zurück zur Startseite -->
+    <a href="index.html">Abbrechen</a>
 </body>
 </html>
