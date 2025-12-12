@@ -26,17 +26,17 @@
         .label { font-size: 0.9rem; color: #333; margin-bottom: 5px; display: block; text-align: left; width: 100%; }
         .amount-value { font-size: 1.8rem; font-weight: 500; margin-bottom: 20px; display: block; width: 100%; text-align: left; }
         .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; width: 100%; }
-        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; width: 100%; text-align: left;}
+        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; width: 100%; text-align: left; min-height: 10px; }
         
-        /* Das Bild Styling */
+        /* --- BILD STYLING (Rechteckig) --- */
         .recipient-img { 
-            width: 80px; 
-            height: 80px; 
-            object-fit: cover; 
-            border-radius: 50%; 
+            width: 100px;  /* Etwas größer gemacht */
+            height: 100px; 
+            object-fit: contain; /* Bild wird nicht abgeschnitten */
+            border-radius: 10px; /* 10px = Rechteckig mit leichten Ecken. 0px = Ganz eckig */
             margin-top: 10px; 
-            display: none; /* Standardmäßig ausgeblendet */
-            border: 2px solid #eee;
+            display: none; 
+            /* border: 1px solid #eee; */ /* Rand entfernt, sieht meist besser aus */
         }
 
         .ok-btn { background-color: white; color: black; width: 90%; max-width: 350px; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border-radius: 10px; margin-bottom: 30px; border: none; display: block; }
@@ -63,9 +63,9 @@
         <div class="separator"></div>
         
         <span class="label">Empfänger</span>
-        <div class="recipient-value" id="displayRecipient">Unbekannt</div>
+        <div class="recipient-value" id="displayRecipient"></div> <!-- Standardmäßig leer -->
         
-        <!-- HIER kommt das Bild rein -->
+        <!-- Bild -->
         <img id="recipientImg" class="recipient-img" src="" alt="Empfänger Bild">
     </div>
     
@@ -79,7 +79,8 @@
         
         const urlParams = new URLSearchParams(window.location.search);
         let amount = urlParams.get('amount') || "0.00";
-        let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "Unbekannt";
+        // HIER GEÄNDERT: Wenn kein Name da ist, bleibt es leer ("") statt "Unbekannt"
+        let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "";
         
         document.getElementById('displayAmount').innerText = 'CHF ' + amount;
         document.getElementById('displayRecipient').innerText = recipientName;
@@ -89,7 +90,7 @@
         if (savedImage) {
             const imgElement = document.getElementById('recipientImg');
             imgElement.src = savedImage;
-            imgElement.style.display = 'block'; // Bild anzeigen
+            imgElement.style.display = 'block';
         }
 
         // --- SPEICHERN FÜR DIE LISTE ---
@@ -99,13 +100,16 @@
         if (lastSaved !== currentTxId) {
             let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
             
+            // Wenn kein Name da ist, speichern wir "Unbekannt" für die Liste, 
+            // sonst sieht die Liste komisch aus. Auf der Karte oben bleibt es aber leer.
+            let listName = recipientName;
+            if (listName === "") { listName = "Unbekannt"; }
+
             transactions.unshift({ 
-                name: recipientName, 
+                name: listName, 
                 amount: amount, 
                 date: "Heute", 
-                time: timeStr,
-                // Hinweis: Wir speichern das Bild NICHT in der Historie, 
-                // da der Browser-Speicher sonst sofort voll wäre.
+                time: timeStr
             });
             
             if (transactions.length > 20) transactions.pop();
