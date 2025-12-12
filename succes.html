@@ -22,15 +22,79 @@
         .fade-in-element { opacity: 0; animation: fadeIn 0.5s ease-in forwards; animation-delay: 0.9s; }
         h2 { font-weight: 400; font-size: 1.4rem; margin-bottom: 10px; }
         .date-time { font-size: 1rem; opacity: 0.9; }
-        .card { background-color: white; width: 90%; max-width: 350px; border-radius: 15px; color: black; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .label { font-size: 0.9rem; color: #333; margin-bottom: 5px; display: block; text-align: left; width: 100%; }
-        .amount-value { font-size: 1.8rem; font-weight: 500; margin-bottom: 20px; display: block; width: 100%; text-align: left; }
-        .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; width: 100%; }
-        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; width: 100%; text-align: left; min-height: 10px; }
+        
+        /* KARTE */
+        .card { 
+            background-color: white; 
+            width: 90%; 
+            max-width: 350px; 
+            border-radius: 15px; 
+            color: black; 
+            padding: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+            text-align: center; /* Alles in der Karte zentrieren */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+
+        /* TEXTE WIEDER ZENTRIERT */
+        .label { 
+            font-size: 0.9rem; 
+            color: #333; 
+            margin-bottom: 5px; 
+            display: block; 
+            text-align: center; /* ZENTRIERT */
+            width: 100%; 
+        }
+        
+        .amount-value { 
+            font-size: 1.8rem; 
+            font-weight: 500; 
+            margin-bottom: 20px; 
+            display: block; 
+            width: 100%; 
+            text-align: center; /* ZENTRIERT */
+        }
+        
+        .separator { 
+            border-top: 1px solid #e0e0e0; 
+            margin: 15px 0; 
+            position: relative; 
+            width: 100%; 
+        }
+        
+        .separator::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: -6px;
+            transform: translateX(-50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .recipient-value { 
+            font-size: 1.5rem; 
+            margin-top: 10px; 
+            display: block; 
+            font-weight: 500; 
+            width: 100%; 
+            text-align: center; /* ZENTRIERT */
+            min-height: 10px; 
+        }
         
         .recipient-img { 
-            width: 100px; height: 100px; object-fit: contain; border-radius: 10px; 
-            margin-top: 10px; display: none; 
+            width: 100px; 
+            height: 100px; 
+            object-fit: contain; 
+            border-radius: 10px; 
+            margin-top: 10px; 
+            display: none; 
         }
 
         .ok-btn { background-color: white; color: black; width: 90%; max-width: 350px; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border-radius: 10px; margin-bottom: 30px; border: none; display: block; }
@@ -53,9 +117,13 @@
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
         <span class="amount-value" id="displayAmount">CHF 0.00</span>
+        
         <div class="separator"></div>
+        
         <span class="label">Empfänger</span>
         <div class="recipient-value" id="displayRecipient"></div>
+        
+        <!-- Bild -->
         <img id="recipientImg" class="recipient-img" src="" alt="Empfänger Bild">
     </div>
     
@@ -95,10 +163,9 @@
                 amount: amount, 
                 date: "Heute", 
                 time: timeStr,
-                image: savedImage || null // HIER: Bild wird jetzt fest gespeichert!
+                image: savedImage || null 
             });
             
-            // Wir speichern nur die letzten 10, um Speicher zu sparen (wegen Bildern)
             if (transactions.length > 10) transactions.pop();
             
             localStorage.setItem('twint_transactions', JSON.stringify(transactions));
