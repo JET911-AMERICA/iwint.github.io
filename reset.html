@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Reparieren</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background-color: #f2f2f7; }
+        h1 { color: #c94f4f; }
+        p { max-width: 300px; margin-bottom: 20px; }
+        button { background-color: #c94f4f; color: white; border: none; padding: 20px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>App Reparieren</h1>
+    <p>Wenn Transaktionen nicht mehr gespeichert werden, drücke diesen Knopf. <br>⚠️ Alle bisherigen Transaktionen werden gelöscht!</p>
+    <button onclick="resetApp()">Alles löschen & Reparieren</button>
+
+    <script>
+        function resetApp() {
+            // Löscht den kompletten Speicher der App
+            localStorage.clear();
+            sessionStorage.clear();
+            alert("App wurde erfolgreich zurückgesetzt!");
+            // Leitet zurück zur Startseite
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
