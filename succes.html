@@ -28,15 +28,9 @@
         .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; width: 100%; }
         .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; width: 100%; text-align: left; min-height: 10px; }
         
-        /* --- BILD STYLING (Rechteckig) --- */
         .recipient-img { 
-            width: 100px;  /* Etwas größer gemacht */
-            height: 100px; 
-            object-fit: contain; /* Bild wird nicht abgeschnitten */
-            border-radius: 10px; /* 10px = Rechteckig mit leichten Ecken. 0px = Ganz eckig */
-            margin-top: 10px; 
-            display: none; 
-            /* border: 1px solid #eee; */ /* Rand entfernt, sieht meist besser aus */
+            width: 100px; height: 100px; object-fit: contain; border-radius: 10px; 
+            margin-top: 10px; display: none; 
         }
 
         .ok-btn { background-color: white; color: black; width: 90%; max-width: 350px; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border-radius: 10px; margin-bottom: 30px; border: none; display: block; }
@@ -59,13 +53,9 @@
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
         <span class="amount-value" id="displayAmount">CHF 0.00</span>
-        
         <div class="separator"></div>
-        
         <span class="label">Empfänger</span>
-        <div class="recipient-value" id="displayRecipient"></div> <!-- Standardmäßig leer -->
-        
-        <!-- Bild -->
+        <div class="recipient-value" id="displayRecipient"></div>
         <img id="recipientImg" class="recipient-img" src="" alt="Empfänger Bild">
     </div>
     
@@ -79,13 +69,11 @@
         
         const urlParams = new URLSearchParams(window.location.search);
         let amount = urlParams.get('amount') || "0.00";
-        // HIER GEÄNDERT: Wenn kein Name da ist, bleibt es leer ("") statt "Unbekannt"
         let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "";
         
         document.getElementById('displayAmount').innerText = 'CHF ' + amount;
         document.getElementById('displayRecipient').innerText = recipientName;
         
-        // --- BILD LADEN ---
         const savedImage = localStorage.getItem('temp_transaction_image');
         if (savedImage) {
             const imgElement = document.getElementById('recipientImg');
@@ -93,15 +81,12 @@
             imgElement.style.display = 'block';
         }
 
-        // --- SPEICHERN FÜR DIE LISTE ---
         const lastSaved = sessionStorage.getItem('last_tx_id');
         const currentTxId = amount + recipientName + timeStr; 
         
         if (lastSaved !== currentTxId) {
             let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
             
-            // Wenn kein Name da ist, speichern wir "Unbekannt" für die Liste, 
-            // sonst sieht die Liste komisch aus. Auf der Karte oben bleibt es aber leer.
             let listName = recipientName;
             if (listName === "") { listName = "Unbekannt"; }
 
@@ -109,10 +94,13 @@
                 name: listName, 
                 amount: amount, 
                 date: "Heute", 
-                time: timeStr
+                time: timeStr,
+                image: savedImage || null // HIER: Bild wird jetzt fest gespeichert!
             });
             
-            if (transactions.length > 20) transactions.pop();
+            // Wir speichern nur die letzten 10, um Speicher zu sparen (wegen Bildern)
+            if (transactions.length > 10) transactions.pop();
+            
             localStorage.setItem('twint_transactions', JSON.stringify(transactions));
             sessionStorage.setItem('last_tx_id', currentTxId);
         }
