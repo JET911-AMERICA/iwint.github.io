@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zahlung erfolgreich</title>
     
-    <!-- === APP CODE START === -->
+    <!-- APP CODE -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- === APP CODE ENDE === -->
 
     <style>
         body { background-color: #6a9e55; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; justify-content: space-between; }
@@ -23,11 +22,23 @@
         .fade-in-element { opacity: 0; animation: fadeIn 0.5s ease-in forwards; animation-delay: 0.9s; }
         h2 { font-weight: 400; font-size: 1.4rem; margin-bottom: 10px; }
         .date-time { font-size: 1rem; opacity: 0.9; }
-        .card { background-color: white; width: 90%; max-width: 350px; border-radius: 15px; color: black; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; }
-        .label { font-size: 0.9rem; color: #333; margin-bottom: 5px; display: block; text-align: left; }
-        .amount-value { font-size: 1.8rem; font-weight: 500; margin-bottom: 20px; display: block; }
-        .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; }
-        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; }
+        .card { background-color: white; width: 90%; max-width: 350px; border-radius: 15px; color: black; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .label { font-size: 0.9rem; color: #333; margin-bottom: 5px; display: block; text-align: left; width: 100%; }
+        .amount-value { font-size: 1.8rem; font-weight: 500; margin-bottom: 20px; display: block; width: 100%; text-align: left; }
+        .separator { border-top: 1px solid #e0e0e0; margin: 15px 0; position: relative; width: 100%; }
+        .recipient-value { font-size: 1.5rem; margin-top: 10px; display: block; font-weight: 500; width: 100%; text-align: left;}
+        
+        /* Das Bild Styling */
+        .recipient-img { 
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border-radius: 50%; 
+            margin-top: 10px; 
+            display: none; /* Standardmäßig ausgeblendet */
+            border: 2px solid #eee;
+        }
+
         .ok-btn { background-color: white; color: black; width: 90%; max-width: 350px; padding: 15px; text-align: center; text-decoration: none; font-weight: bold; font-size: 1.1rem; border-radius: 10px; margin-bottom: 30px; border: none; display: block; }
     </style>
 </head>
@@ -44,29 +55,59 @@
             <div class="date-time" id="currentDate"></div>
         </div>
     </div>
+    
     <div class="card fade-in-element">
         <span class="label">Betrag</span>
         <span class="amount-value" id="displayAmount">CHF 0.00</span>
+        
         <div class="separator"></div>
+        
         <span class="label">Empfänger</span>
         <div class="recipient-value" id="displayRecipient">Unbekannt</div>
+        
+        <!-- HIER kommt das Bild rein -->
+        <img id="recipientImg" class="recipient-img" src="" alt="Empfänger Bild">
     </div>
+    
     <a href="index.html" class="ok-btn fade-in-element">OK</a>
+    
     <script>
         const now = new Date();
         const dateStr = now.toLocaleDateString('de-CH', { day: 'numeric', month: 'long', year: 'numeric' }); 
         const timeStr = now.toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
         document.getElementById('currentDate').innerText = `${dateStr} | ${timeStr}`;
+        
         const urlParams = new URLSearchParams(window.location.search);
         let amount = urlParams.get('amount') || "0.00";
         let recipientName = urlParams.get('name') || urlParams.get('recipient_name') || "Unbekannt";
+        
         document.getElementById('displayAmount').innerText = 'CHF ' + amount;
         document.getElementById('displayRecipient').innerText = recipientName;
+        
+        // --- BILD LADEN ---
+        const savedImage = localStorage.getItem('temp_transaction_image');
+        if (savedImage) {
+            const imgElement = document.getElementById('recipientImg');
+            imgElement.src = savedImage;
+            imgElement.style.display = 'block'; // Bild anzeigen
+        }
+
+        // --- SPEICHERN FÜR DIE LISTE ---
         const lastSaved = sessionStorage.getItem('last_tx_id');
         const currentTxId = amount + recipientName + timeStr; 
+        
         if (lastSaved !== currentTxId) {
             let transactions = JSON.parse(localStorage.getItem('twint_transactions') || '[]');
-            transactions.unshift({ name: recipientName, amount: amount, date: "Heute", time: timeStr });
+            
+            transactions.unshift({ 
+                name: recipientName, 
+                amount: amount, 
+                date: "Heute", 
+                time: timeStr,
+                // Hinweis: Wir speichern das Bild NICHT in der Historie, 
+                // da der Browser-Speicher sonst sofort voll wäre.
+            });
+            
             if (transactions.length > 20) transactions.pop();
             localStorage.setItem('twint_transactions', JSON.stringify(transactions));
             sessionStorage.setItem('last_tx_id', currentTxId);
