@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startseite</title>
     
-    <!-- === APP CODE START === -->
+    <!-- APP CODE -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- === APP CODE ENDE === -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -22,7 +21,12 @@
         .section-title { font-size: 0.9rem; color: #333; font-weight: 600; }
         .show-all { color: #eb5d5e; font-size: 0.8rem; text-decoration: none; }
         .card { background-color: white; margin: 0 15px 20px 15px; border-radius: 15px; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        
+        /* Avatar Circle */
         .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.2rem; color: #555; overflow: hidden; flex-shrink: 0; }
+        /* Damit das Bild perfekt in den Kreis passt */
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+        
         .tx-details { flex-grow: 1; }
         .tx-name { font-weight: 600; font-size: 1rem; display: block; }
         .tx-date { color: #999; font-size: 0.8rem; }
@@ -106,9 +110,18 @@
         const container = document.getElementById('latest-transaction-container');
         if (transactions.length > 0) {
             const latest = transactions[0];
+            
+            // HIER DIE ÄNDERUNG: Wenn ein Bild da ist, zeige es an, sonst das Icon
+            let avatarContent = '<i class="fas fa-user"></i>';
+            if (latest.image) {
+                avatarContent = `<img src="${latest.image}">`;
+            }
+
             container.innerHTML = `
                 <div class="card">
-                    <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                    <div class="avatar-circle">
+                        ${avatarContent}
+                    </div>
                     <div class="tx-details">
                         <span class="tx-name">${latest.name}</span>
                         <span class="tx-date">${latest.date}</span>
